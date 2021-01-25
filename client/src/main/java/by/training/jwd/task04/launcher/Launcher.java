@@ -8,6 +8,8 @@ import java.io.*;
 import java.util.Properties;
 
 public class Launcher {
+    public static boolean isRunning = true;
+
     public static void main(String[] args) {
         Properties clientProperties = getClientProperties();
         String host = clientProperties.getProperty("host");
@@ -32,23 +34,18 @@ public class Launcher {
                 return;
             }
 
-
-            while(true) {
+            consoleView.printAvailableCommands();
+            while(isRunning) {
                 consoleView.printClientLabel();
                 userCommand = reader.readLine();
 
                 consoleController.handleClientCommand(userCommand);
             }
-
-
+            consoleView.printApplicationShutdown();
 
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-
-
-
-
     }
 
     public static Properties getClientProperties() {

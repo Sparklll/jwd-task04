@@ -1,7 +1,9 @@
 package by.training.jwd.task04.controller;
 
+import by.training.jwd.task04.launcher.Launcher;
 import by.training.jwd.task04.view.impl.ConsoleView;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class ConsoleController {
@@ -20,7 +22,21 @@ public class ConsoleController {
     }
 
     public void handleClientCommand(String clientCommand) {
-        consoleView.printUnsupportedCommandExecution();
+        clientCommand = clientCommand
+                .toLowerCase()
+                .trim();
+
+        switch (clientCommand) {
+            case "operations" -> consoleView.printAvailableProcessingOperations();
+            case "exit" -> Launcher.isRunning = false;
+            default -> {
+                if(clientCommand.matches("[1-9]|1[0-6]")) { // 1-16
+
+                } else {
+                    consoleView.printUnsupportedCommandExecution();
+                }
+            }
+        }
     }
 
     @Override

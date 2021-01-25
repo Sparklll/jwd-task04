@@ -1,12 +1,14 @@
 package by.training.jwd.task04.client;
 
+import by.training.jwd.task04.entity.interaction.Request;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Objects;
 
 public class Client {
@@ -30,16 +32,16 @@ public class Client {
             inputStream = clientSocket.getInputStream();
         } catch (SocketException e) {
             e.printStackTrace();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void disconnect() {
         try {
-            clientSocket.close();
+            if(clientSocket != null) {
+                clientSocket.close();
+            }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -71,7 +73,9 @@ public class Client {
 
     public boolean isConnected() {
         try {
-            outputStream.write(1);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(Request.getTestRequest());
+
             isConnected = true;
         } catch (Exception e) {
             isConnected = false;
