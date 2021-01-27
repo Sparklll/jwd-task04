@@ -1,5 +1,7 @@
 package by.training.jwd.task04.view.impl;
 
+import by.training.jwd.task04.entity.text.Text;
+import by.training.jwd.task04.entity.text.TextProcessingResponse;
 import by.training.jwd.task04.view.View;
 
 import java.io.*;
@@ -19,6 +21,14 @@ public class ConsoleView implements View {
 
     public ConsoleView(Writer out) {
         writer = new PrintWriter(out, true);
+    }
+
+    public PrintWriter getWriter() {
+        return writer;
+    }
+
+    public void setWriter(PrintWriter writer) {
+        this.writer = writer;
     }
 
     public void printGreeting() {
@@ -48,13 +58,24 @@ public class ConsoleView implements View {
 
     public void printAvailableCommands() {
         writer.println(APP_LABEL + "You can use the following commands: ");
+        writer.println("\t[commands] - displays a list of available commands");
         writer.println("\t[operations] - displays a list of available operations");
         writer.println("\t[1-16] - selection the operation number to be performed");
         writer.println("\t[exit] - exits the program");
     }
 
+    public void printRequestAdditionalParameters() {
+        writer.printf(APP_LABEL + "Enter additional parameters (if necessary): ");
+    }
+
+    public void printServerResponse(TextProcessingResponse response) {
+        Text processedText = response.getText();
+        writer.println(SERVER_LABEL + "[response]");
+        writer.println(processedText);
+    }
+
     public void printAvailableProcessingOperations() {
-        writer.println("Select number(1-16) of text processing operation: ");
+        writer.println("Select number (1-16) of text processing operation: ");
         writer.println("(1) - Find the largest number of sentences of text that contain the same words.");
         writer.println("(2) - Display all sentences of the given text in ascending order of the number of \n" +
                 "words in each of them.");

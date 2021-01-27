@@ -15,7 +15,6 @@ public class Client {
     private String host;
     private int port;
     private Socket clientSocket;
-    private boolean isConnected = false;
 
     private OutputStream outputStream;
     private InputStream inputStream;
@@ -32,19 +31,36 @@ public class Client {
             inputStream = clientSocket.getInputStream();
         } catch (SocketException e) {
             e.printStackTrace();
-        }  catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void disconnect() {
         try {
-            if(clientSocket != null) {
+            if (clientSocket != null) {
                 clientSocket.close();
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        boolean isConnected;
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(Request.getTestRequest());
+
+            isConnected = true;
+        } catch (Exception e) {
+            isConnected = false;
+        }
+        return isConnected;
+    }
+
+    public boolean isClosed() {
+        return clientSocket.isClosed();
     }
 
     public String getHost() {
@@ -69,22 +85,6 @@ public class Client {
 
     public InputStream getInputStream() {
         return inputStream;
-    }
-
-    public boolean isConnected() {
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(Request.getTestRequest());
-
-            isConnected = true;
-        } catch (Exception e) {
-            isConnected = false;
-        }
-        return isConnected;
-    }
-
-    public boolean isClosed() {
-        return clientSocket.isClosed();
     }
 
     @Override

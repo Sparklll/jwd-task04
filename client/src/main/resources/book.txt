@@ -1,0 +1,533 @@
+Literals
+   Ordinarily, when you insert a literal value into a program, the compiler knows exactly what
+   type to make it. Sometimes, however, the type is ambiguous. When this happens, you must
+   guide the compiler by adding some extra information in the form of characters associated
+   with the literal value. The following code shows these characters:
+
+   //: operators/Literals.java
+   import static net.mindview.util.Print.*;
+
+   public class Literals {
+     public static void main(String[] args) {
+       int i1 = 0x2f; // Hexadecimal (lowercase)
+       print("i1: " + Integer.toBinaryString(i1));
+       int i2 = 0X2F; // Hexadecimal (uppercase)
+       print("i2: " + Integer.toBinaryString(i2));
+       int i3 = 0177; // Octal (leading zero)
+       print("i3: " + Integer.toBinaryString(i3));
+       char c = 0xffff; // max char hex value
+
+          print("c: " + Integer.toBinaryString(c));
+          byte b = 0x7f; // max byte hex value
+          print("b: " + Integer.toBinaryString(b));
+          short s = 0x7fff; // max short hex value
+          print("s: " + Integer.toBinaryString(s));
+          long n1 = 200L; // long suffix
+          long n2 = 200l; // long suffix (but can be confusing)
+          long n3 = 200;
+          float f1 = 1;
+          float f2 = 1F; // float suffix
+          float f3 = 1f; // float suffix
+          double d1 = 1d; // double suffix
+          double d2 = 1D; // double suffix
+          // (Hex and Octal also work with long)
+       }
+     } /* Output:
+     i1: 101111
+     i2: 101111
+     i3: 1111111
+     c: 1111111111111111
+     b: 1111111
+     s: 111111111111111
+     *///:~
+
+     A trailing character after a literal value establishes its type. Uppercase or lowercase L means
+     long (however, using a lowercase l is confusing because it can look like the number one).
+     Uppercase or lowercase F means float. Uppercase or lowercase D means double.
+
+     Hexadecimal (base 16), which works with all the integral data types, is denoted by a leading
+     0x or 0X followed by 0-9 or a-f either in uppercase or lowercase. If you try to initialize a
+     variable with a value bigger than it can hold (regardless of the numerical form of the value),
+     the compiler will give you an error message. Notice in the preceding code the maximum
+     possible hexadecimal values for char, byte, and short. If you exceed these, the compiler will
+     automatically make the value an int and tell you that you need a narrowing cast for the
+     assignment (casts are defined later in this chapter). You’ll know you’ve stepped over the line.
+
+     Octal (base 8) is denoted by a leading zero in the number and digits from 0-7.
+
+     There is no literal representation for binary numbers in C, C++, or Java. However, when
+     working with hexadecimal and octal notation, it’s useful to display the binary form of the
+     results. This is easily accomplished with the static toBinaryString( ) methods from the
+     Integer and Long classes. Notice that when passing smaller types to
+     Integer.toBinaryString( ), the type is automatically converted to an int.
+
+     Exercise 8: (2) Show that hex and octal notations work with long values. Use
+     Long.toBinaryString( ) to display the results.
+
+
+     Exponential notation
+     Exponents use a notation that I’ve always found rather dismaying:
+
+     //: operators/Exponents.java
+     // "e" means "10 to the power."
+
+     public class Exponents {
+       public static void main(String[] args) {
+         // Uppercase and lowercase ‘e’ are the same:
+         float expFloat = 1.39e-43f;
+         expFloat = 1.39E-43f;
+         System.out.println(expFloat);
+         double expDouble = 47e47d; // ‘d’ is optional
+         double expDouble2 = 47e47; // Automatically double
+         System.out.println(expDouble);
+     }
+   } /* Output:
+   1.39E-43
+   4.7E48
+   *///:~
+
+   In science and engineering, ‘e’ refers to the base of natural logarithms, approximately 2.718.
+   (A more precise double value is available in Java as Math.E.) This is used in exponentiation
+   expressions such as 1.39 x e-43, which means 1.39 x 2.718-43. However, when the FORTRAN
+   programming language was invented, they decided that e would mean “ten to the power”,
+   which is an odd decision because FORTRAN was designed for science and engineering, and
+   one would think its designers would be sensitive about introducing such an ambiguity. 2 At
+   any rate, this custom was followed in C, C++ and now Java. So if you’re used to thinking in
+   terms of e as the base of natural logarithms, you must do a mental translation when you see
+   an expression such as 1.39 e-43f in Java; it means 1.39 x 10-43.
+
+   Note that you don’t need to use the trailing character when the compiler can figure out the
+   appropriate type. With
+
+   long n3 = 200;
+
+   there’s no ambiguity, so an L after the 200 would be superfluous. However, with
+
+   float f4 = 1e-43f; // 10 to the power
+
+   the compiler normally takes exponential numbers as doubles, so without the trailing f, it will
+   give you an error telling you that you must use a cast to convert double to float.
+
+   Exercise 9: (1) Display the largest and smallest numbers for both float and double
+   exponential notation.
+
+
+Bitwise operators
+   The bitwise operators allow you to manipulate individual bits in an integral primitive data
+   type. Bitwise operators perform Boolean algebra on the corresponding bits in the two
+   arguments to produce the result.
+
+   The bitwise operators come from C’s low-level orientation, where you often manipulate
+   hardware directly and must set the bits in hardware registers. Java was originally designed to
+   be embedded in TV set-top boxes, so this low-level orientation still made sense. However,
+   you probably won’t use the bitwise operators much.
+
+
+
+
+   2 John Kirkham writes, “I started computing in 1962 using FORTRAN II on an IBM 1620. At that time, and throughout
+   the 1960s and into the 1970s, FORTRAN was an all uppercase language. This probably started because many of the early
+   input devices were old teletype units that used 5 bit Baudot code, which had no lowercase capability. The ‘E’ in the
+   exponential notation was also always uppercase and was never confused with the natural logarithm base ‘e’, which is
+   always lowercase. The ‘E’ simply stood for exponential, which was for the base of the number system used—usually 10. At
+   the time octal was also widely used by programmers. Although I never saw it used, if I had seen an octal number in
+   exponential notation I would have considered it to be base 8. The first time I remember seeing an exponential using a
+   lowercase ‘e’ was in the late 1970s and I also found it confusing. The problem arose as lowercase crept into FORTRAN, not
+   at its beginning. We actually had functions to use if you really wanted to use the natural logarithm base, but they were all
+   uppercase.”
+
+     The bitwise AND operator (&) produces a one in the output bit if both input bits are one;
+     otherwise, it produces a zero. The bitwise OR operator (|) produces a one in the output bit if
+     either input bit is a one and produces a zero only if both input bits are zero. The bitwise
+     EXCLUSIVE OR, or XOR (^), produces a one in the output bit if one or the other input bit is
+     a one, but not both. The bitwise NOT (~, also called the ones complement operator) is a
+     unary operator; it takes only one argument. (All other bitwise operators are binary
+     operators.) Bitwise NOT produces the opposite of the input bit—a one if the input bit is zero,
+     a zero if the input bit is one.
+
+     The bitwise operators and logical operators use the same characters, so it is helpful to have a
+     mnemonic device to help you remember the meanings: Because bits are “small”, there is only
+     one character in the bitwise operators.
+
+     Bitwise operators can be combined with the = sign to unite the operation and assignment:
+     &=, |= and ^= are all legitimate. (Since ~ is a unary operator, it cannot be combined with
+     the = sign.)
+
+     The boolean type is treated as a one-bit value, so it is somewhat different. You can perform
+     a bitwise AND, OR, and XOR, but you can’t perform a bitwise NOT (presumably to prevent
+     confusion with the logical NOT). For booleans, the bitwise operators have the same effect as
+     the logical operators except that they do not short circuit. Also, bitwise operations on
+     booleans include an XOR logical operator that is not included under the list of “logical”
+     operators. You cannot use booleans in shift expressions, which are described next.
+
+     Exercise 10: (3) Write a program with two constant values, one with alternating binary
+     ones and zeroes, with a zero in the least-significant digit, and the second, also alternating,
+     with a one in the least-significant digit (hint: It’s easiest to use hexadecimal constants for
+     this). Take these two values and combine them in all possible ways using the bitwise
+     operators, and display the results using Integer.toBinaryString( ).
+
+
+Shift operators
+     The shift operators also manipulate bits. They can be used solely with primitive, integral
+     types. The left-shift operator (<<) produces the operand to the left of the operator after it has
+     been shifted to the left by the number of bits specified to the right of the operator (inserting
+     zeroes at the lower-order bits). The signed right-shift operator (>>) produces the operand to
+     the left of the operator after it has been shifted to the right by the number of bits specified to
+     the right of the operator. The signed right shift >> uses sign extension: If the value is
+     positive, zeroes are inserted at the higher-order bits; if the value is negative, ones are inserted
+     at the higher-order bits. Java has also added the unsigned right shift >>>, which uses zero
+     extension: Regardless of the sign, zeroes are inserted at the higher-order bits. This operator
+     does not exist in C or C++.
+
+     If you shift a char, byte, or short, it will be promoted to int before the shift takes place, and
+     the result will be an int. Only the five low-order bits of the right-hand side will be used. This
+     prevents you from shifting more than the number of bits in an int. If you’re operating on a
+     long, you’ll get a long result. Only the six low-order bits of the right-hand side will be used,
+     so you can’t shift more than the number of bits in a long.
+
+     Shifts can be combined with the equal sign (<<= or >>= or >>>=). The lvalue is replaced by
+     the lvalue shifted by the rvalue. There is a problem, however, with the unsigned right shift
+     combined with assignment. If you use it with byte or short, you don’t get the correct results.
+     Instead, these are promoted to int and right shifted, but then truncated as they are assigned
+     back into their variables, so you get -1 in those cases. The following example demonstrates
+     this:
+
+
+   //: operators/URShift.java
+   // Test of unsigned right shift.
+   import static net.mindview.util.Print.*;
+
+   public class URShift {
+     public static void main(String[] args) {
+       int i = -1;
+       print(Integer.toBinaryString(i));
+       i >>>= 10;
+       print(Integer.toBinaryString(i));
+       long l = -1;
+       print(Long.toBinaryString(l));
+       l >>>= 10;
+       print(Long.toBinaryString(l));
+       short s = -1;
+       print(Integer.toBinaryString(s));
+       s >>>= 10;
+       print(Integer.toBinaryString(s));
+       byte b = -1;
+       print(Integer.toBinaryString(b));
+       b >>>= 10;
+       print(Integer.toBinaryString(b));
+       b = -1;
+       print(Integer.toBinaryString(b));
+       print(Integer.toBinaryString(b>>>10));
+     }
+   } /* Output:
+   11111111111111111111111111111111
+   1111111111111111111111
+   1111111111111111111111111111111111111111111111111111111111111111
+   111111111111111111111111111111111111111111111111111111
+   11111111111111111111111111111111
+   11111111111111111111111111111111
+   11111111111111111111111111111111
+   11111111111111111111111111111111
+   11111111111111111111111111111111
+   1111111111111111111111
+   *///:~
+
+   In the last shift, the resulting value is not assigned back into b, but is printed directly, so the
+   correct behavior occurs.
+
+   Here’s an example that demonstrates the use of all the operators involving bits:
+
+   //: operators/BitManipulation.java
+   // Using the bitwise operators.
+   import java.util.*;
+   import static net.mindview.util.Print.*;
+
+   public class BitManipulation {
+     public static void main(String[] args) {
+       Random rand = new Random(47);
+       int i = rand.nextInt();
+       int j = rand.nextInt();
+       printBinaryInt("-1", -1);
+       printBinaryInt("+1", +1);
+       int maxpos = 2147483647;
+       printBinaryInt("maxpos", maxpos);
+       int maxneg = -2147483648;
+       printBinaryInt("maxneg", maxneg);
+       printBinaryInt("i", i);
+       printBinaryInt("~i", ~i);
+       
+        printBinaryInt("-i", -i);
+        printBinaryInt("j", j);
+        printBinaryInt("i & j", i & j);
+        printBinaryInt("i | j", i | j);
+        printBinaryInt("i ^ j", i ^ j);
+        printBinaryInt("i << 5", i << 5);
+        printBinaryInt("i >> 5", i >> 5);
+        printBinaryInt("(~i) >> 5", (~i) >> 5);
+        printBinaryInt("i >>> 5", i >>> 5);
+        printBinaryInt("(~i) >>> 5", (~i) >>> 5);
+
+        long l = rand.nextLong();
+        long m = rand.nextLong();
+        printBinaryLong("-1L", -1L);
+        printBinaryLong("+1L", +1L);
+        long ll = 9223372036854775807L;
+        printBinaryLong("maxpos", ll);
+        long lln = -9223372036854775808L;
+        printBinaryLong("maxneg", lln);
+        printBinaryLong("l", l);
+        printBinaryLong("~l", ~l);
+        printBinaryLong("-l", -l);
+        printBinaryLong("m", m);
+        printBinaryLong("l & m", l & m);
+        printBinaryLong("l | m", l | m);
+        printBinaryLong("l ^ m", l ^ m);
+        printBinaryLong("l << 5", l << 5);
+        printBinaryLong("l >> 5", l >> 5);
+        printBinaryLong("(~l) >> 5", (~l) >> 5);
+        printBinaryLong("l >>> 5", l >>> 5);
+        printBinaryLong("(~l) >>> 5", (~l) >>> 5);
+       }
+       static void printBinaryInt(String s, int i) {
+         print(s + ", int: " + i + ", binary:\n   " +
+           Integer.toBinaryString(i));
+       }
+       static void printBinaryLong(String s, long l) {
+         print(s + ", long: " + l + ", binary:\n    " +
+           Long.toBinaryString(l));
+       }
+     } /* Output:
+     -1, int: -1, binary:
+        11111111111111111111111111111111
+     +1, int: 1, binary:
+        1
+     maxpos, int: 2147483647, binary:
+        1111111111111111111111111111111
+     maxneg, int: -2147483648, binary:
+        10000000000000000000000000000000
+     i, int: -1172028779, binary:
+        10111010001001000100001010010101
+     ~i, int: 1172028778, binary:
+        1000101110110111011110101101010
+     -i, int: 1172028779, binary:
+        1000101110110111011110101101011
+     j, int: 1717241110, binary:
+        1100110010110110000010100010110
+     i & j, int: 570425364, binary:
+        100010000000000000000000010100
+     i | j, int: -25213033, binary:
+        11111110011111110100011110010111
+     i ^ j, int: -595638397, binary:
+        11011100011111110100011110000011
+   i << 5, int: 1149784736, binary:
+      1000100100010000101001010100000
+   i >> 5, int: -36625900, binary:
+      11111101110100010010001000010100
+   (~i) >> 5, int: 36625899, binary:
+      10001011101101110111101011
+   i >>> 5, int: 97591828, binary:
+      101110100010010001000010100
+   (~i) >>> 5, int: 36625899, binary:
+      10001011101101110111101011
+   ...
+   *///:~
+
+   The two methods at the end, printBinaryInt( ) and printBinaryLong( ), take an int or a
+   long, respectively, and print it out in binary format along with a descriptive string. As well as
+   demonstrating the effect of all the bitwise operators for int and long, this example also
+   shows the minimum, maximum, +1, and -1 values for int and long so you can see what they
+   look like. Note that the high bit represents the sign: 0 means positive and 1 means negative.
+   The output for the int portion is displayed above.
+
+   The binary representation of the numbers is referred to as signed twos complement.
+
+   Exercise 11: (3) Start with a number that has a binary one in the most significant
+   position (hint: Use a hexadecimal constant). Using the signed right-shift operator, right shift
+   it all the way through all of its binary positions, each time displaying the result using
+   Integer.toBinaryString( ).
+
+   Exercise 12: (3) Start with a number that is all binary ones. Left shift it, then use the
+   unsigned right-shift operator to right shift through all of its binary positions, each time
+   displaying the result using Integer.toBinaryString( ).
+
+   Exercise 13: (1) Write a method that displays char values in binary form. Demonstrate
+   it using several different characters.
+
+
+Ternary if-else operator
+   The ternary operator, also called the conditional operator, is unusual because it has three
+   operands. It is truly an operator because it produces a value, unlike the ordinary if-else
+   statement that you’ll see in the next section of this chapter. The expression is of the form:
+
+   boolean-exp ? value0 : value1
+
+   If boolean-exp evaluates to true, value0 is evaluated, and its result becomes the value
+   produced by the operator. If boolean-exp is false, value1 is evaluated and its result becomes
+   the value produced by the operator.
+
+   Of course, you could use an ordinary if-else statement (described later), but the ternary
+   operator is much terser. Although C (where this operator originated) prides itself on being a
+   terse language, and the ternary operator might have been introduced partly for efficiency,
+   you should be somewhat wary of using it on an everyday basis—it’s easy to produce
+   unreadable code.
+
+   The conditional operator is different from if-else because it produces a value. Here’s an
+   example comparing the two:
+
+   //: operators/TernaryIfElse.java
+
+
+     import static net.mindview.util.Print.*;
+
+     public class TernaryIfElse {
+       static int ternary(int i) {
+         return i < 10 ? i * 100 : i * 10;
+       }
+       static int standardIfElse(int i) {
+         if(i < 10)
+           return i * 100;
+         else
+           return i * 10;
+       }
+       public static void main(String[] args) {
+         print(ternary(9));
+         print(ternary(10));
+         print(standardIfElse(9));
+         print(standardIfElse(10));
+       }
+     } /* Output:
+     900
+     100
+     900
+     100
+     *///:~
+
+     You can see that this code in ternary( ) is more compact than what you’d need to write
+     without the ternary operator, in standardIfElse( ). However, standardIfElse( ) is easier
+     to understand, and doesn’t require a lot more typing. So be sure to ponder your reasons when
+     choosing the ternary operator—it’s generally warranted when you’re setting a variable to one
+     of two values.
+
+
+String operator + and +=
+     There’s one special usage of an operator in Java: The + and += operators can be used to
+     concatenate strings, as you’ve already seen. It seems a natural use of these operators even
+     though it doesn’t fit with the traditional way that they are used.
+
+     This capability seemed like a good idea in C++, so operator overloading was added to C++ to
+     allow the C++ programmer to add meanings to almost any operator. Unfortunately, operator
+     overloading combined with some of the other restrictions in C++ turns out to be a fairly
+     complicated feature for programmers to design into their classes. Although operator
+     overloading would have been much simpler to implement in Java than it was in C++ (as has
+     been demonstrated in the C# language, which does have straightforward operator
+     overloading), this feature was still considered too complex, so Java programmers cannot
+     implement their own overloaded operators like C++ and C# programmers can.
+
+     The use of the String operators has some interesting behavior. If an expression begins with a
+     String, then all operands that follow must be Strings (remember that the compiler
+     automatically turns a double-quoted sequence of characters into a String):
+
+     //: operators/StringOperators.java
+     import static net.mindview.util.Print.*;
+
+     public class StringOperators {
+       public static void main(String[] args) {
+         int x = 0, y = 1, z = 2;
+         String s = "x, y, z ";
+         print(s + x + y + z);
+         print(x + " " + s); // Converts x to a String
+        s += "(summed) = "; // Concatenation operator
+        print(s + (x + y + z));
+        print("" + x); // Shorthand for Integer.toString()
+     }
+   } /* Output:
+   x, y, z 012
+   0 x, y, z
+   x, y, z (summed) = 3
+   0
+   *///:~
+
+   Note that the output from the first print statement is ‘o12’ instead of just ‘3’, which is what
+   you’d get if it was summing the integers. This is because the Java compiler converts x, y, and
+   z into their String representations and concatenates those strings, instead of adding them
+   together first. The second print statement converts the leading variable into a String, so the
+   string conversion does not depend on what comes first. Finally, you see the use of the +=
+   operator to append a string to s, and the use of parentheses to control the order of evaluation
+   of the expression so that the ints are actually summed before they are displayed.
+
+   Notice the last example in main( ): you will sometimes see an empty String followed by a +
+   and a primitive as a way to perform the conversion without calling the more cumbersome
+   explicit method (Integer.toString( ), in this case).
+
+
+Common pitfalls when using operators
+   One of the pitfalls when using operators is attempting to leave out the parentheses when you
+   are even the least bit uncertain about how an expression will evaluate. This is still true in
+   Java.
+
+   An extremely common error in C and C++ looks like this:
+
+   while(x = y) {
+     // ....
+   }
+
+   The programmer was clearly trying to test for equivalence (==) rather than do an
+   assignment. In C and C++ the result of this assignment will always be true if y is nonzero,
+   and you’ll probably get an infinite loop. In Java, the result of this expression is not a
+   boolean, but the compiler expects a boolean and won’t convert from an int, so it will
+   conveniently give you a compile-time error and catch the problem before you ever try to run
+   the program. So the pitfall never happens in Java. (The only time you won’t get a compile-
+   time error is when x and y are boolean, in which case x = y is a legal expression, and in the
+   preceding example, probably an error.)
+
+   A similar problem in C and C++ is using bitwise AND and OR instead of the logical versions.
+   Bitwise AND and OR use one of the characters (& or |) while logical AND and OR use two
+   (&& and ||). Just as with = and ==, it’s easy to type just one character instead of two. In
+   Java, the compiler again prevents this, because it won’t let you cavalierly use one type where
+   it doesn’t belong.
+
+
+Casting operators
+   The word cast is used in the sense of “casting into a mold.” Java will automatically change
+   one type of data into another when appropriate. For instance, if you assign an integral value
+   to a floating point variable, the compiler will automatically convert the int to a float. Casting
+
+
+Operators allows you to make this type conversion explicit, or to force it when it wouldn’t normally happen.
+
+     To perform a cast, put the desired data type inside parentheses to the left of any value. You
+     can see this in the following example:
+
+     //: operators/Casting.java
+
+     public class Casting {
+       public static void main(String[] args) {
+         int i = 200;
+         long lng = (long)i;
+         lng = i; // "Widening," so cast not really required
+         long lng2 = (long)200;
+         lng2 = 200;
+         // A "narrowing conversion":
+         i = (int)lng2; // Cast required
+       }
+     } ///:~
+
+     As you can see, it’s possible to perform a cast on a numeric value as well as on a variable.
+     Notice that you can introduce superfluous casts; for example, the compiler will automatically
+     promote an int value to a long when necessary. However, you are allowed to use superfluous
+     casts to make a point or to clarify your code. In other situations, a cast may be essential just
+     to get the code to compile.
+
+     In C and C++, casting can cause some headaches. In Java, casting is safe, with the exception
+     that when you perform a so-called narrowing conversion (that is, when you go from a data
+     type that can hold more information to one that doesn’t hold as much), you run the risk of
+     losing information. Here the compiler forces you to use a cast, in effect saying, “This can be a
+     dangerous thing to do—if you want me to do it anyway you must make the cast explicit.” With
+     a widening conversion an explicit cast is not needed, because the new type will more than
+     hold the information from the old type so that no information is ever lost.
+
+     Java allows you to cast any primitive type to any other primitive type, except for boolean,
+     which doesn’t allow any casting at all. Class types do not allow casting. To convert one to the
+     other, there must be special methods. (You’ll find out later in this book that objects can be
+     cast within a family of types; an Oak can be cast to a Tree and vice versa, but not to a
+     foreign type such as a Rock.)
