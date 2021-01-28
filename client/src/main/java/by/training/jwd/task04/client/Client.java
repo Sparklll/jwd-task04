@@ -2,10 +2,7 @@ package by.training.jwd.task04.client;
 
 import by.training.jwd.task04.entity.interaction.Request;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import java.net.Socket;
 import java.net.SocketException;
@@ -16,8 +13,8 @@ public class Client {
     private int port;
     private Socket clientSocket;
 
-    private OutputStream outputStream;
-    private InputStream inputStream;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
     public Client(String host, int port) {
         this.host = host;
@@ -27,8 +24,8 @@ public class Client {
     public void connect() {
         try {
             clientSocket = new Socket(host, port);
-            outputStream = clientSocket.getOutputStream();
-            inputStream = clientSocket.getInputStream();
+            objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -39,6 +36,8 @@ public class Client {
     public void disconnect() {
         try {
             if (clientSocket != null) {
+                objectInputStream.close();
+                objectOutputStream.close();
                 clientSocket.close();
             }
         } catch (IOException exception) {
@@ -49,9 +48,7 @@ public class Client {
     public boolean isConnected() {
         boolean isConnected;
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(Request.getTestRequest());
-
             isConnected = true;
         } catch (Exception e) {
             isConnected = false;
@@ -79,12 +76,16 @@ public class Client {
         this.port = port;
     }
 
-    public OutputStream getOutputStream() {
-        return outputStream;
+    public Socket getClientSocket() {
+        return clientSocket;
     }
 
-    public InputStream getInputStream() {
-        return inputStream;
+    public ObjectOutputStream getObjectOutputStream() {
+        return objectOutputStream;
+    }
+
+    public ObjectInputStream getObjectInputStream() {
+        return objectInputStream;
     }
 
     @Override
@@ -95,12 +96,12 @@ public class Client {
         return port == client.port
                 && Objects.equals(host, client.host)
                 && Objects.equals(clientSocket, client.clientSocket)
-                && Objects.equals(outputStream, client.outputStream)
-                && Objects.equals(inputStream, client.inputStream);
+                && Objects.equals(objectOutputStream, client.objectOutputStream)
+                && Objects.equals(objectInputStream, client.objectInputStream);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(host, port, clientSocket, outputStream, inputStream);
+        return Objects.hash(host, port, clientSocket, objectOutputStream, objectInputStream);
     }
 }

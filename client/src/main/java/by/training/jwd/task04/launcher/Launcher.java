@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class Launcher {
     public static boolean isRunning = true;
-    public static final InputStream DEFAULT_INPUT_STREAM = System.in;
+
 
     public static void main(String[] args) {
         Properties clientProperties = getClientProperties();
@@ -22,7 +22,8 @@ public class Launcher {
             client = new Client(host, port);
             ConsoleView consoleView = new ConsoleView();
             ClientController clientController = new ClientController(client, consoleView);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(DEFAULT_INPUT_STREAM));
+            BufferedReader reader = consoleView.getReader();
+
             String userCommand;
 
             consoleView.printGreeting();
@@ -40,12 +41,13 @@ public class Launcher {
             consoleView.printAvailableCommands();
             while (isRunning) {
                 consoleView.printClientLabel();
-                userCommand = reader.readLine();
 
+                userCommand = reader.readLine();
                 clientController.handleClientCommand(userCommand);
 
                 if (!client.isConnected()) {
                     isRunning = false;
+                    consoleView.printConnectionLost();
                 }
             }
             consoleView.printApplicationShutdown();

@@ -61,33 +61,33 @@ public class ClientController {
         TextDao textDao = TextDaoImpl.getInstance();
         Text text = textDao.retrieveText();
 
-        Request request = new TextProcessingRequest(text, requestParameters);
+        Request clientRequest = new TextProcessingRequest(text, requestParameters);
 
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
-            objectOutputStream.writeObject(request);
+            ObjectOutputStream objectOutputStream = client.getObjectOutputStream();
+            objectOutputStream.writeObject(clientRequest);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
 
     public Response getResponse() {
-        Response response = new TextProcessingResponse();
+        Response serverResponse = new TextProcessingResponse();
 
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
-            response = (Response) objectInputStream.readObject();
+            ObjectInputStream objectInputStream = client.getObjectInputStream();
+            serverResponse = (Response) objectInputStream.readObject();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
-        return response;
+        return serverResponse;
     }
 
     public String readAdditionalParameters() {
         String parameters = "";
         consoleView.printRequestAdditionalParameters();
-        try (BufferedReader reader
-                     = new BufferedReader(new InputStreamReader(Launcher.DEFAULT_INPUT_STREAM))) {
+        try {
+            BufferedReader reader = consoleView.getReader();
             parameters = reader.readLine();
         } catch (IOException exception) {
             exception.printStackTrace();

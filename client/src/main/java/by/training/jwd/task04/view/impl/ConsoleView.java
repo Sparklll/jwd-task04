@@ -11,12 +11,17 @@ public class ConsoleView implements View {
     private static final String CLIENT_LABEL = "[CLIENT]: ";
     private static final String SERVER_LABEL = "[SERVER]: ";
     private static final String WARNING_LABEL = "[WARNING]";
+
+    private static final InputStream DEFAULT_INPUT_STREAM = System.in;
     private static final OutputStream DEFAULT_OUTPUT_STREAM = System.out;
 
-    public PrintWriter writer;
+
+    private PrintWriter writer;
+    private BufferedReader reader;
 
     public ConsoleView() {
         writer = new PrintWriter(DEFAULT_OUTPUT_STREAM, true);
+        reader = new BufferedReader(new InputStreamReader(DEFAULT_INPUT_STREAM));
     }
 
     public ConsoleView(Writer out) {
@@ -29,6 +34,14 @@ public class ConsoleView implements View {
 
     public void setWriter(PrintWriter writer) {
         this.writer = writer;
+    }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public void setReader(BufferedReader reader) {
+        this.reader = reader;
     }
 
     public void printGreeting() {
@@ -46,6 +59,10 @@ public class ConsoleView implements View {
     public void printConnectionStatus(boolean isConnected) {
         String status = isConnected ? "Successfully connected!" : "Server connection ERROR!";
         writer.println(APP_LABEL + status);
+    }
+
+    public void printConnectionLost() {
+        writer.println(APP_LABEL + "Connection lost");
     }
 
     public void printUnsupportedCommandExecution() {
