@@ -1,5 +1,6 @@
 package by.training.jwd.task04.server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Objects;
 
@@ -12,12 +13,37 @@ public class Server {
     }
 
     public int getPort() {
-
         return port;
     }
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void openServerSocket() {
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void switchOff() {
+        try {
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private boolean isClosed() {
+        return serverSocket.isClosed();
     }
 
     @Override
