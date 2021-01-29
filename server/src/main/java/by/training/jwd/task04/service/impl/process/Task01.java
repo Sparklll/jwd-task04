@@ -1,4 +1,4 @@
-package by.training.jwd.task04.service.impl.task;
+package by.training.jwd.task04.service.impl.process;
 
 import by.training.jwd.task04.entity.text.Text;
 import by.training.jwd.task04.service.Process;

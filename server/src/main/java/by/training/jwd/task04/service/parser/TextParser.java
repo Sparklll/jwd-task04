@@ -1,16 +1,11 @@
 package by.training.jwd.task04.service.parser;
 
 import by.training.jwd.task04.entity.text.Text;
-import by.training.jwd.task04.service.Process;
-
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.BreakIterator;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +57,7 @@ public class TextParser {
         int start = iterator.first();
         int end = iterator.next();
         while (end != BreakIterator.DONE) {
-            String sentence = content.substring(start, end);
+            String sentence = content.substring(start, end).trim();
             sentences.add(sentence);
 
             start = end;
@@ -92,5 +87,17 @@ public class TextParser {
         }
 
         return sentenceWords;
+    }
+
+    public List<String> getTextWords(Text text) {
+        List<String> textSentences = getSentences(text);
+        List<String> textWords = new ArrayList<>();
+
+        textSentences.forEach((s) -> {
+            List<String> sentenceWords = getSentenceWords(s);
+            textWords.addAll(sentenceWords);
+        });
+
+        return textWords;
     }
 }

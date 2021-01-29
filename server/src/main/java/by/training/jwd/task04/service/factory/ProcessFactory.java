@@ -2,7 +2,7 @@ package by.training.jwd.task04.service.factory;
 
 import by.training.jwd.task04.entity.text.Text;
 import by.training.jwd.task04.service.Process;
-import by.training.jwd.task04.service.impl.task.*;
+import by.training.jwd.task04.service.impl.process.*;
 
 public class ProcessFactory {
     public static Process createProcess(int processId) {

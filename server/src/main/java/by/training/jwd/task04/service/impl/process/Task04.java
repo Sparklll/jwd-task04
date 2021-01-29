@@ -1,4 +1,4 @@
-package by.training.jwd.task04.service.impl.task;
+package by.training.jwd.task04.service.impl.process;
 
 import by.training.jwd.task04.entity.text.Text;
 import by.training.jwd.task04.service.Process;
@@ -13,6 +13,7 @@ public class Task04 implements Process {
     public Text perform(Text text, String parameters) {
         TextParser textParser = TextParser.getInstance();
         List<String> sentences = textParser.getSentences(text);
+        Text result = new Text();
 
         int wordLength = Integer.parseInt(parameters);
 
@@ -32,8 +33,12 @@ public class Task04 implements Process {
                     suitableWords.forEach((word) -> sentenceBuilder
                             .append(word)
                             .append(" "));
+
+                    sentenceBuilder
+                            .append("\n");
                 });
 
-        return new Text(sentenceBuilder.toString());
+        result.setContent(sentenceBuilder.toString());
+        return result;
     }
 }
