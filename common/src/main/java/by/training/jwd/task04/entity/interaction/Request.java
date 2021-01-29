@@ -7,8 +7,8 @@ public class Request implements Serializable {
     private static final long serialVersionUID = 7140131267089837865L;
     private static final Request TEST_REQUEST = new Request(TransferType.TEST);
 
-    private TransferType transferType;
-    private String parameters;
+    private TransferType transferType = TransferType.DATA;
+    private String parameters = "";
 
     public Request() {
     }
@@ -17,8 +17,13 @@ public class Request implements Serializable {
         this.parameters = parameters;
     }
 
-    private Request(TransferType transferType) {
+    public Request(TransferType transferType) {
         this.transferType = transferType;
+    }
+
+    public Request(TransferType transferType, String parameters) {
+        this.transferType = transferType;
+        this.parameters = parameters;
     }
 
     public TransferType getTransferType() {

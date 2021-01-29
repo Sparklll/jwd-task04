@@ -8,7 +8,7 @@ public class Response implements Serializable {
     private static final Response TEST_RESPONSE = new Response(TransferType.TEST);
 
     private TransferType transferType = TransferType.DATA;
-    private String parameters;
+    private String parameters = "";
 
     public Response() {
     }
@@ -17,8 +17,13 @@ public class Response implements Serializable {
         this.parameters = parameters;
     }
 
-    private Response(TransferType transferType) {
-        this.transferType = TransferType.TEST;
+    public Response(TransferType transferType) {
+        this.transferType = transferType;
+    }
+
+    public Response(TransferType transferType, String parameters) {
+        this.transferType = transferType;
+        this.parameters = parameters;
     }
 
     public TransferType getTransferType() {

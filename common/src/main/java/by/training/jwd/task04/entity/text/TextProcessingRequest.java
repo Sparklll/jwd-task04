@@ -9,6 +9,10 @@ public class TextProcessingRequest extends Request {
 
     private Text text;
 
+    public TextProcessingRequest() {
+        text = new Text();
+    }
+
     public TextProcessingRequest(Text text) {
         this.text = text;
     }
