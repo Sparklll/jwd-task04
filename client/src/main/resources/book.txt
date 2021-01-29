@@ -1,6 +1,6 @@
 Literals
    Ordinarily, when you insert a literal value into a program, the compiler knows exactly what
-   type to make it. Sometimes, however, the type is ambiguous. When this happens, you must
+   type to make it? Sometimes, however, the type is ambiguous. When this happens, you must
    guide the compiler by adding some extra information in the form of characters associated
    with the literal value. The following code shows these characters:
 
@@ -465,12 +465,6 @@ Common pitfalls when using operators
    are even the least bit uncertain about how an expression will evaluate. This is still true in
    Java.
 
-   An extremely common error in C and C++ looks like this:
-
-   while(x = y) {
-     // ....
-   }
-
    The programmer was clearly trying to test for equivalence (==) rather than do an
    assignment. In C and C++ the result of this assignment will always be true if y is nonzero,
    and you’ll probably get an infinite loop. In Java, the result of this expression is not a
@@ -510,7 +504,7 @@ Operators allows you to make this type conversion explicit, or to force it when 
          // A "narrowing conversion":
          i = (int)lng2; // Cast required
        }
-     } ///:~
+     } *///:~
 
      As you can see, it’s possible to perform a cast on a numeric value as well as on a variable.
      Notice that you can introduce superfluous casts; for example, the compiler will automatically
