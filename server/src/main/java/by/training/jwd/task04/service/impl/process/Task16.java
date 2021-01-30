@@ -15,7 +15,7 @@ public class Task16 implements Process {
         List<String> sentences = textParser.getSentences(text);
         Text result = new Text();
 
-        String[] params = parameters.split(" ");
+        String[] params = parameters.split(" ", 2);
         int wordToReplaceLength = Integer.parseInt(params[0]);
         String replacement = params[1];
 

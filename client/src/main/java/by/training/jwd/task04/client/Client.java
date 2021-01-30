@@ -1,14 +1,17 @@
 package by.training.jwd.task04.client;
 
 import by.training.jwd.task04.entity.interaction.Request;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Objects;
 
 public class Client {
+    private static final Logger logger = LogManager.getLogger(Client.class);
+
     private String host;
     private int port;
     private Socket clientSocket;
@@ -26,10 +29,9 @@ public class Client {
             clientSocket = new Socket(host, port);
             objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-        } catch (SocketException e) {
-            e.printStackTrace();
+            logger.info("Connection to the server successfully established. [Host] - " + host + " [Port] - " + port);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Unable to connect to the server");
         }
     }
 
@@ -39,9 +41,10 @@ public class Client {
                 objectInputStream.close();
                 objectOutputStream.close();
                 clientSocket.close();
+                logger.info("Connection with server closed successfully");
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Unable to disconnect from the server");
         }
     }
 
@@ -50,8 +53,10 @@ public class Client {
         try {
             objectOutputStream.writeObject(Request.getTestRequest());
             isConnected = true;
+            logger.info("Connection status : connected");
         } catch (Exception e) {
             isConnected = false;
+            logger.info("Connection status : not connected");
         }
         return isConnected;
     }

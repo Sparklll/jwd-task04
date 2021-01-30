@@ -10,11 +10,14 @@ import by.training.jwd.task04.entity.text.TextProcessingRequest;
 import by.training.jwd.task04.entity.text.TextProcessingResponse;
 import by.training.jwd.task04.launcher.Launcher;
 import by.training.jwd.task04.view.impl.ConsoleView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Objects;
 
 public class ClientController {
+    private static final Logger logger = LogManager.getLogger(ClientController.class);
     private final Client client;
     private ConsoleView consoleView;
 
@@ -36,7 +39,9 @@ public class ClientController {
                 .toLowerCase()
                 .trim();
 
+        logger.info("Trying to handle command : " + clientCommand);
         switch (clientCommand) {
+
             case "operations" -> consoleView.printAvailableProcessingOperations();
             case "commands" -> consoleView.printAvailableCommands();
             case "exit" -> Launcher.isRunning = false;
@@ -66,8 +71,12 @@ public class ClientController {
         try {
             ObjectOutputStream objectOutputStream = client.getObjectOutputStream();
             objectOutputStream.writeObject(clientRequest);
+
+            logger.info("Request has been sent :  [operation number - " + operationNumber + "] " +
+                    " [additional parameters  - " + additionalParameters.trim() + "]");
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Error while sending request : [operation number - " + operationNumber + "] " +
+                    " [additional parameters  - " + additionalParameters.trim() + "]");
         }
     }
 
@@ -78,7 +87,7 @@ public class ClientController {
             ObjectInputStream objectInputStream = client.getObjectInputStream();
             serverResponse = (Response) objectInputStream.readObject();
         } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
+            logger.error("Error while receiving response");
         }
         return serverResponse;
     }
@@ -90,7 +99,7 @@ public class ClientController {
             BufferedReader reader = consoleView.getReader();
             parameters = reader.readLine();
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Unable to read additional parameters");
         }
         return parameters;
     }

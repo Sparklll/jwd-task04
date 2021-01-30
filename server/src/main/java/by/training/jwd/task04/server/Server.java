@@ -1,10 +1,15 @@
 package by.training.jwd.task04.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Objects;
 
 public class Server {
+    public static final Logger logger = LogManager.getLogger(Server.class);
+
     private int port;
     private ServerSocket serverSocket;
 
@@ -27,8 +32,9 @@ public class Server {
     public void openServerSocket() {
         try {
             serverSocket = new ServerSocket(port);
+            logger.info("Successfully opened server port : " + port);
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Unable to open server port");
         }
     }
 
@@ -36,9 +42,10 @@ public class Server {
         try {
             if (serverSocket != null) {
                 serverSocket.close();
+                logger.info("Server was switched off");
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Unable to switch off the server");
         }
     }
 

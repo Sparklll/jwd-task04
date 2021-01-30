@@ -29,6 +29,7 @@ public class ServerConnectionController {
         Text text = textProcessingRequest.getText();
         String parameters = textProcessingRequest.getParameters();
 
+
         TextProcessorService textProcessorService = new TextProcessorServiceImpl();
         Text result = textProcessorService.processText(text, parameters);
         serverResponse.setText(result);

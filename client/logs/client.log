@@ -1,0 +1,24 @@
+2021-01-30 15:42:22.308+0300 INFO Client properties was successfully loaded
+2021-01-30 15:42:22.322+0300 INFO Connection to the server successfully established. [Host] - localhost [Port] - 10000
+2021-01-30 15:42:22.328+0300 INFO Connection status : connected
+2021-01-30 15:42:25.912+0300 INFO Trying to handle command : operations
+2021-01-30 15:42:25.914+0300 INFO Connection status : connected
+2021-01-30 15:42:28.094+0300 INFO Trying to handle command : 1
+2021-01-30 15:42:29.325+0300 INFO Request has been sent :  [operation number - 1]  [additional parameters  - ]
+2021-01-30 15:42:29.414+0300 INFO Connection status : connected
+2021-01-30 15:42:30.240+0300 INFO Trying to handle command : 2
+2021-01-30 15:42:31.011+0300 INFO Request has been sent :  [operation number - 2]  [additional parameters  - ]
+2021-01-30 15:42:31.081+0300 INFO Connection status : connected
+2021-01-30 15:42:32.432+0300 INFO Trying to handle command : 3
+2021-01-30 15:42:33.278+0300 INFO Request has been sent :  [operation number - 3]  [additional parameters  - ]
+2021-01-30 15:42:33.324+0300 INFO Connection status : connected
+2021-01-30 15:42:35.435+0300 INFO Trying to handle command : 4
+2021-01-30 15:42:36.312+0300 INFO Request has been sent :  [operation number - 4]  [additional parameters  - 5]
+2021-01-30 15:42:36.358+0300 INFO Connection status : connected
+2021-01-30 15:42:39.286+0300 INFO Trying to handle command : 6
+2021-01-30 15:42:40.302+0300 INFO Request has been sent :  [operation number - 6]  [additional parameters  - ]
+2021-01-30 15:42:40.399+0300 INFO Connection status : connected
+2021-01-30 15:43:05.123+0300 INFO Trying to handle command : exit
+2021-01-30 15:43:05.123+0300 INFO Connection status : connected
+2021-01-30 15:43:05.124+0300 INFO Application shutdown
+2021-01-30 15:43:05.126+0300 INFO Connection with server closed successfully

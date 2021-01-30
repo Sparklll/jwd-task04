@@ -3,11 +3,14 @@ package by.training.jwd.task04.launcher;
 import by.training.jwd.task04.client.Client;
 import by.training.jwd.task04.controller.ClientController;
 import by.training.jwd.task04.view.impl.ConsoleView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Properties;
 
 public class Launcher {
+    private static final Logger logger = LogManager.getLogger(Launcher.class);
     public static boolean isRunning = true;
 
 
@@ -34,6 +37,7 @@ public class Launcher {
             consoleView.printConnectionStatus(isConnected);
 
             if (!isConnected) {
+                logger.info("Unable to connect to the server");
                 consoleView.printApplicationShutdown();
                 return;
             }
@@ -51,9 +55,9 @@ public class Launcher {
                 }
             }
             consoleView.printApplicationShutdown();
-
+            logger.info("Application shutdown");
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Application crash");
         } finally {
             if (client != null) {
                 client.disconnect();
@@ -67,8 +71,9 @@ public class Launcher {
         try (InputStream clientResource =
                      Launcher.class.getClassLoader().getResourceAsStream("client.properties")) {
             clientProperties.load(clientResource);
+            logger.info("Client properties was successfully loaded");
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Unable to load client properties");
         }
         return clientProperties;
     }

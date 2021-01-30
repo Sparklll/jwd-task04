@@ -4,26 +4,32 @@ import by.training.jwd.task04.controller.ServerConnectionController;
 import by.training.jwd.task04.entity.interaction.Request;
 import by.training.jwd.task04.entity.interaction.Response;
 import by.training.jwd.task04.entity.interaction.TransferType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ServerConnection implements Runnable {
+    private static final Logger logger = LogManager.getLogger(ServerConnection.class);
+
     private final Socket clientSocket;
     private boolean connectionEstablished;
 
     public ServerConnection(Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.connectionEstablished = true;
+        logger.info("Connection established with [" + clientSocket.getRemoteSocketAddress() + "]");
     }
 
     public void closeConnection() {
         try {
             if (clientSocket != null) {
                 clientSocket.close();
+                logger.info("Connection with [" + clientSocket.getRemoteSocketAddress() + "] closed successfully");
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
+            logger.error("Unable to close connection with [" + clientSocket.getRemoteSocketAddress() + "]");
         }
     }
 
@@ -46,6 +52,10 @@ public class ServerConnection implements Runnable {
                 Request clientRequest = (Request) objectInputStream.readObject();
                 TransferType requestTransferType = clientRequest.getTransferType();
 
+                logger.info("Handle request from user [" + clientSocket.getRemoteSocketAddress() + "] " +
+                        "[request type - " + requestTransferType + "] " +
+                        "[parameters - " + clientRequest.getParameters().trim() + "]");
+
                 if (requestTransferType == TransferType.DATA) {
                     Response serverResponse = connectionController.processClientRequest(clientRequest);
                     objectOutputStream.writeObject(serverResponse);
@@ -58,10 +68,8 @@ public class ServerConnection implements Runnable {
                     }
                 }
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException exception) {
+            logger.error("Server connection with [" + clientSocket.getInetAddress().getHostAddress() + "] " + "has been crushed");
         } finally {
             closeConnection();
         }

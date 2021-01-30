@@ -1,6 +1,8 @@
 package by.training.jwd.task04.service.parser;
 
 import by.training.jwd.task04.entity.text.Text;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextParser {
+    private static final Logger logger = LogManager.getLogger(TextParser.class);
     private static final String REGEX_PROPERTIES = "regex.properties";
     private static final String REGEX_CODE_PROPERTY = "regex.pattern.code";
     public static final Pattern CODE_PATTERN;
@@ -23,8 +26,9 @@ public class TextParser {
         try (InputStream inputStream = TextParser.class.getClassLoader().getResourceAsStream(REGEX_PROPERTIES)) {
             parserProperties = new Properties();
             parserProperties.load(inputStream);
+            logger.info("Parser properties was successfully loaded");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Unable to load parser properties");
         }
         String codePattern = parserProperties.getProperty(REGEX_CODE_PROPERTY);
         CODE_PATTERN = Pattern.compile(codePattern);
